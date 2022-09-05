@@ -1,6 +1,7 @@
 package aliyun
 
 import (
+	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"go-oss/conf"
 	"go-oss/store"
@@ -13,7 +14,11 @@ var (
 )
 
 func init() {
-	aliStore, err := NewAliOssStore(conf.OssEndPoint, conf.OssAccessKeyId, conf.OssAccessSecret)
+	opts, err := NewDefaultAliOssStore()
+	if err != nil {
+		panic("load default config is error")
+	}
+	aliStore, err := NewAliOssStore(opts)
 	if err != nil {
 		panic(err)
 	}
@@ -24,9 +29,36 @@ type AliOssStore struct {
 	client *oss.Client
 }
 
+type Options struct {
+	EndPoint     string
+	AccessKey    string
+	AccessSecret string
+}
+
+func (o *Options) validate() error {
+	if o.AccessKey == "" || o.AccessSecret == "" || o.EndPoint == "" {
+		return fmt.Errorf("oss connection params is empty")
+	}
+	return nil
+}
+
+func NewDefaultAliOssStore() (*Options, error) {
+	opts := &Options{
+		EndPoint:     conf.OssEndPoint,
+		AccessSecret: conf.OssAccessSecret,
+		AccessKey:    conf.OssAccessKeyId,
+	}
+	return opts, nil
+}
+
 // NewAliOssStore AliOssStore Constructor
-func NewAliOssStore(endPoint, accessKey, accessSecret string) (*AliOssStore, error) {
-	client, err := oss.New(endPoint, accessKey, accessSecret)
+func NewAliOssStore(opts *Options) (*AliOssStore, error) {
+	// validate input params
+	if err := opts.validate(); err != nil {
+		return nil, err
+	}
+	// new oss client
+	client, err := oss.New(opts.EndPoint, opts.AccessKey, opts.AccessSecret)
 	if err != nil {
 		return nil, err
 	}
