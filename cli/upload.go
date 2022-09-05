@@ -41,7 +41,7 @@ var UploadCmd = &cobra.Command{
 func init() {
 	f := UploadCmd.PersistentFlags()
 	f.StringVarP(&ossProviderName, "provider", "p", "aliyun", "oss storage provider [tencent/minio]")
-	f.StringVarP(&ossBucketName, "bucket_name", "bn", "go-learn", "oss storage provider bucket name")
-	f.StringVarP(&uploadFileName, "file_name", "fn", "", "upload file name")
+	f.StringVarP(&ossBucketName, "bucket_name", "b", "go-learn", "oss storage provider bucket name")
+	f.StringVarP(&uploadFileName, "file_name", "f", "", "upload file name")
 	RootCmd.AddCommand(UploadCmd)
 }

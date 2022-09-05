@@ -5,10 +5,10 @@ import (
 )
 
 var (
-	OssAccessKeyId  string = os.Getenv("OssAccessKeyId")
-	OssAccessSecret string = os.Getenv("OssAccessSecret")
-	OssEndPoint     string = os.Getenv("OssEndPoint")
-	OssBucket       string = os.Getenv("OssBucket")
+	OssAccessKeyId  string
+	OssAccessSecret string
+	OssEndPoint     string
+	OssBucket       string
 )
 
 func init() {
